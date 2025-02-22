@@ -1,0 +1,24 @@
+query MoviesReview {
+  allMovies {
+    edges {
+      node {
+        id
+        title
+        releaseDate
+        movieReviewsByMovieId {
+          edges {
+            node {
+              id
+              rating
+              title
+              userByUserReviewerId {
+                id
+                name
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
