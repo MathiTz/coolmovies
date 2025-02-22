@@ -17,29 +17,13 @@ import {
   ListItemButton,
 } from "@mui/material"
 import { MoviesReviewDocument, useCreateMovieReviewMutation, useCurrentUserQuery, useMoviesReviewQuery } from "../../../generated/graphql"
-
-
-const style = {
-  position: 'absolute' as const,
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  borderRadius: 1,
-  boxShadow: 24,
-  p: 4,
-}
+import { Movie } from "./index.types"
+import { style } from "./style"
 
 const NewReviewPage: NextPage = () => {
   const router = useRouter()
   const { data: moviesData, loading: moviesLoading } = useMoviesReviewQuery()
   const { data: userData } = useCurrentUserQuery()
-  interface Movie {
-    id: string;
-    title: string;
-    releaseDate: string;
-  }
 
   const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null)
   const [rating, setRating] = useState<number | null>(0)
