@@ -16,8 +16,7 @@ import {
   TextField,
   ListItemButton,
 } from "@mui/material"
-import { MoviesReviewDocument, useCreateMovieReviewMutation, useCurrentUserQuery, useMoviesReviewQuery } from "../../../generated/graphql"
-import { Movie } from "./index.types"
+import { Movie, MoviesReviewDocument, useCreateMovieReviewMutation, useCurrentUserQuery, useMoviesReviewQuery } from "../../../generated/graphql"
 import { style } from "./style"
 
 const NewReviewPage: NextPage = () => {
@@ -31,7 +30,7 @@ const NewReviewPage: NextPage = () => {
   const [open, setOpen] = useState(false)
   const [createReview] = useCreateMovieReviewMutation()
 
-  const handleOpen = (movie: any) => {
+  const handleOpen = (movie: Movie) => {
     setSelectedMovie(movie)
     setOpen(true)
   }
@@ -73,8 +72,17 @@ const NewReviewPage: NextPage = () => {
   return (
     <Box sx={{ padding: 4, backgroundColor: "#e0f7fa", minHeight: "100vh" }}>
       <Typography variant="h2" component="h1" gutterBottom color="primary">
-        Inserir Review
+        Create Review
       </Typography>
+
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={() => router.push("/reviews")}
+        sx={{ marginBottom: 4 }}
+      >
+        Go back
+      </Button>
 
       {moviesLoading && (
         <Skeleton
@@ -89,14 +97,14 @@ const NewReviewPage: NextPage = () => {
         <Card sx={{ backgroundColor: "#ffffff", marginBottom: 4 }}>
           <CardContent>
             <Typography variant="h4" color="secondary" gutterBottom>
-              Filmes Disponíveis
+              Available Movies
             </Typography>
             <List>
               {moviesData.allMovies?.edges.map(({ node: movie }) => (
-                <ListItemButton key={movie?.id} onClick={() => handleOpen(movie)}>
+                <ListItemButton key={movie?.id} onClick={() => handleOpen(movie as Movie)}>
                   <ListItemText
                     primary={movie?.title}
-                    secondary={`Data de Lançamento: ${new Date(movie?.releaseDate).toLocaleDateString()}`}
+                    secondary={`Release date: ${new Date(movie?.releaseDate).toLocaleDateString()}`}
                   />
                 </ListItemButton>
               ))}
@@ -113,10 +121,10 @@ const NewReviewPage: NextPage = () => {
       >
         <Box sx={style} component="form" onSubmit={handleSubmit}>
           <Typography id="modal-review-title" variant="h6" component="h2" gutterBottom>
-            {selectedMovie?.title} - Nova Review
+            {selectedMovie?.title} - New Review
           </Typography>
           <Typography variant="body1" gutterBottom>
-            Escolha uma nota:
+            Choose your rating:
           </Typography>
           <Rating
             name="user-rating"
@@ -136,10 +144,10 @@ const NewReviewPage: NextPage = () => {
           />
           <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
             <Button onClick={handleClose} variant="outlined" sx={{ marginRight: 1 }}>
-              Cancelar
+              Cancel
             </Button>
             <Button type="submit" variant="contained" color="primary">
-              Enviar Review
+              Send Review
             </Button>
           </Box>
         </Box>

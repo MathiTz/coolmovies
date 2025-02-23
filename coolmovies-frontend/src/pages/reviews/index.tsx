@@ -1,9 +1,11 @@
 import React from "react"
 import { NextPage } from "next"
 import { useMoviesReviewQuery } from "../../generated/graphql"
-import { Box, Card, CardContent, List, Skeleton, Typography, Rating } from "@mui/material"
+import { Box, Card, CardContent, List, Skeleton, Typography, Rating, Button } from "@mui/material"
+import { useRouter } from "next/router"
 
 const ReviewsPage: NextPage = () => {
+  const router = useRouter()
   const { data, loading } = useMoviesReviewQuery()
 
   return (
@@ -11,6 +13,16 @@ const ReviewsPage: NextPage = () => {
       <Typography variant="h2" component="h1" gutterBottom color="primary">
         Reviews Page
       </Typography>
+
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => router.push("/reviews/create")}
+        sx={{ marginBottom: 4 }}
+      >
+        Create Review
+      </Button>
+
       {loading && (
         <Skeleton
           sx={{ bgcolor: "grey.300", marginBottom: 4 }}
