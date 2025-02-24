@@ -120,8 +120,14 @@ const NewReviewPage: NextPage = () => {
         aria-describedby="modal-review-description"
       >
         <Box sx={style} component="form" onSubmit={handleSubmit}>
-          <Typography id="modal-review-title" variant="h6" component="h2" gutterBottom>
-            {selectedMovie?.title} - New Review
+          <Typography
+            id="modal-review-title"
+            data-testid="modal-review-title"
+            variant="h6"
+            component="h2"
+            gutterBottom
+          >
+            {selectedMovie?.title} - Nova Review
           </Typography>
           <Typography variant="body1" gutterBottom>
             Choose your rating:

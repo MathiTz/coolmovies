@@ -7,7 +7,27 @@ import { MockedProvider } from "@apollo/client/testing"
 import "@testing-library/jest-dom";
 import { MoviesReviewDocument } from "../src/generated/graphql";
 import ReviewsPage from "../src/pages/reviews";
+import { RouterContext } from "next/dist/shared/lib/router-context.shared-runtime";
 
+// Create a simple mocked router
+const createMockRouter = (router: any) => ({
+  route: "/",
+  pathname: "/",
+  query: {},
+  asPath: "/",
+  push: jest.fn(),
+  replace: jest.fn(),
+  reload: jest.fn(),
+  back: jest.fn(),
+  prefetch: jest.fn().mockResolvedValue(undefined),
+  beforePopState: jest.fn(),
+  events: {
+    on: jest.fn(),
+    off: jest.fn(),
+    emit: jest.fn(),
+  },
+  ...router,
+})
 
 const reviewsMock = {
   request: {
@@ -42,12 +62,17 @@ const reviewsMock = {
   },
 }
 
-const setup = () => {
-  return render(
-    <MockedProvider mocks={[reviewsMock]} addTypename={false}>
-      <ReviewsPage />
-    </MockedProvider>
-  )
+const setup = (routerOverrides = {}) => {
+  const mockRouter = createMockRouter(routerOverrides)
+  return {
+    ...render(
+      <RouterContext.Provider value={mockRouter}>
+        <MockedProvider mocks={[reviewsMock]} addTypename={false}>
+          <ReviewsPage />
+        </MockedProvider>
+      </RouterContext.Provider>
+    )
+  }
 }
 
 describe("ReviewsPage", () => {

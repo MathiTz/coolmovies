@@ -118,7 +118,7 @@ describe("NewReviewPage", () => {
 
     // Check that the modal shows the movie title.
     await waitFor(() =>
-      expect(screen.getByText(/Test Movie - Nova Review/i)).toBeInTheDocument()
+      expect(screen.getByTestId("modal-review-title")).toHaveTextContent("Test Movie - Nova Review")
     )
   })
 
@@ -133,9 +133,16 @@ describe("NewReviewPage", () => {
     // Open the modal.
     fireEvent.click(screen.getByText("Test Movie"))
 
-    // Wait for the modal to open.
+    // Wait for the modal to open using a custom matcher that verifies both strings are present.
     await waitFor(() =>
-      expect(screen.getByText(/Test Movie - Nova Review/i)).toBeInTheDocument()
+      expect(
+        screen.getByText((content, element) => {
+          return (
+            content.includes("Test Movie") &&
+            content.includes("Nova Review")
+          )
+        })
+      ).toBeInTheDocument()
     )
 
     // Fill in the review text.
@@ -150,7 +157,7 @@ describe("NewReviewPage", () => {
     fireEvent.click(stars[4])
 
     // Click the "Enviar Review" button to submit.
-    fireEvent.click(screen.getByText("Enviar Review"))
+    fireEvent.click(screen.getByText("Send Review"))
 
     // Wait for router.push to be called with "/reviews"
     await waitFor(() => {
